@@ -6,7 +6,7 @@ public class UserInterface extends JFrame implements ActionListener {
 	JPanel[] row = new JPanel[5];
 	JButton[] button = new JButton[19];
 	String[] buttonString = { "7", "8", "9", "+", "4", "5", "6", "-", "1", "2",
-			"3", "*", ".", "/", "C", "√", "+/-", "=", "0" };
+			"3", "*", ".", "/", "C", "√", "±", "=", "0" };
 	
 	int[] dimW = { 300, 45, 100, 90 };
 	int[] dimH = { 35, 40 };
@@ -55,10 +55,8 @@ public class UserInterface extends JFrame implements ActionListener {
 		display.setEditable(false);
 		display.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		display.setPreferredSize(displayDimension);
-		for (int i = 0; i < 14; i++)
+		for (int i = 0; i < 18; i++)
 			button[i].setPreferredSize(regularDimension);
-		for (int i = 14; i < 18; i++)
-			button[i].setPreferredSize(rColumnDimension);
 		button[18].setPreferredSize(zeroButDimension);
 
 		row[0].add(display);
