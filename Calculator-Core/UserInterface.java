@@ -1,219 +1,125 @@
-import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
-public class UserInterface extends JFrame implements ActionListener {
-	JPanel[] row = new JPanel[5];
-	JButton[] button = new JButton[19];
-	String[] buttonString = { "7", "8", "9", "+", "4", "5", "6", "-", "1", "2",
-			"3", "*", ".", "/", "C", "√", "±", "=", "0" };
-	
-	int[] dimW = { 300, 45, 100, 90 };
-	int[] dimH = { 35, 40 };
-	
-	Dimension displayDimension = new Dimension(dimW[0], dimH[0]);
-	Dimension regularDimension = new Dimension(dimW[1], dimH[1]);
-	Dimension rColumnDimension = new Dimension(dimW[2], dimH[1]);
-	Dimension zeroButDimension = new Dimension(dimW[3], dimH[1]);
-	
-	boolean[] function = new boolean[4];
-	
-	double[] temp = { 0, 0 };
-	
-	JTextArea display = new JTextArea(1, 20);
-	Font font = new Font("Arial", Font.BOLD, 14);
+public class UserInterface extends JFrame implements ActionListener, KeyListener {
+    private JTextPane display = new JTextPane();
+    private HashMap<JButton, CalculatorButton> buttons = new HashMap<>();
+    private HashMap<Character, CalculatorButton> characters = new HashMap<>();
+    private ExpressionEvaluator evaluator = new ExpressionEvaluator();
 
-	UserInterface() {
-		super("Calculator");
-		setDesign();
-		setSize(380, 250);
-		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		GridLayout grid = new GridLayout(5, 5);
-		setLayout(grid);
+    UserInterface() {
+        super("Calculator");
+        setSize(760, 500);
+        setResizable(false);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        GridLayout grid = new GridLayout(5, 5);
+        setLayout(grid);
+        buildDisplay();
+        setFocusable(true);
+        addKeyListener(this);
+        setVisible(true);
+    }
 
-		for (int i = 0; i < 4; i++)
+    private void buildDisplay() {
+        Font font = new Font("Arial", Font.BOLD, 28);
+        Dimension buttonDimension = new Dimension(90, 80);
+        Dimension zeroButtonDimension = new Dimension(180, 80);
 
-			function[i] = false;
+        JPanel activeRow = new JPanel();
+        activeRow.setLayout(new FlowLayout(FlowLayout.CENTER));
+        activeRow.add(display);
+        display.setFont(font);
+        display.setEditable(false);
+        SimpleAttributeSet attributes = new SimpleAttributeSet();
+        StyleConstants.setAlignment(attributes, StyleConstants.ALIGN_RIGHT);
+        StyleConstants.setSpaceAbove(attributes, 16);
+        display.setParagraphAttributes(attributes, false);
+        display.setPreferredSize(new Dimension(600, 70));
+        display.addKeyListener(this);
+        add(activeRow);
 
-		FlowLayout f1 = new FlowLayout(FlowLayout.CENTER);
-		FlowLayout f2 = new FlowLayout(FlowLayout.CENTER, 1, 1);
-		for (int i = 0; i < 5; i++)
-			row[i] = new JPanel();
-		row[0].setLayout(f1);
-		for (int i = 1; i < 5; i++)
-			row[i].setLayout(f2);
+        for (CalculatorButton button : CalculatorButton.values()) {
+            if (button.ordinal() % 5 == 0) {
+                activeRow = new JPanel();
+                activeRow.setLayout(new FlowLayout(FlowLayout.CENTER, 1, 1));
+                add(activeRow);
+            }
+            JButton jButton = new JButton();
+            jButton.setFont(font);
+            jButton.setText(Character.toString(button.symbol));
+            jButton.addActionListener(this);
+            jButton.addKeyListener(this);
+            if (button == CalculatorButton.ZERO) {
+                jButton.setPreferredSize(zeroButtonDimension);
+            } else {
+                jButton.setPreferredSize(buttonDimension);
+            }
+            activeRow.add(jButton);
+            buttons.put(jButton, button);
+            characters.put(button.symbol, button);
+        }
+    }
 
-		for (int i = 0; i < 19; i++) {
-			button[i] = new JButton();
-			button[i].setText(buttonString[i]);
-			button[i].setFont(font);
-			button[i].addActionListener(this);
-		}
+    private void handleButton(CalculatorButton button) {
+        evaluator.handleButton(button);
+        display.setText(evaluator.getDisplay());
+    }
 
-		display.setFont(font);
-		display.setEditable(false);
-		display.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		display.setPreferredSize(displayDimension);
-		for (int i = 0; i < 18; i++)
-			button[i].setPreferredSize(regularDimension);
-		button[18].setPreferredSize(zeroButDimension);
+    @Override
+    public void actionPerformed(ActionEvent ev) {
+        Object source = ev.getSource();
+        if (buttons.containsKey(source)) {
+            handleButton(buttons.get(source));
+        }
+    }
 
-		row[0].add(display);
-		add(row[0]);
+    @Override
+    public void keyTyped(KeyEvent e) {
+        char keyChar = e.getKeyChar();
+        if (characters.containsKey(keyChar)) {
+            handleButton(characters.get(keyChar));
+            return;
+        }
 
-		for (int i = 0; i < 4; i++)
-			row[1].add(button[i]);
-		row[1].add(button[14]);
-		add(row[1]);
+        // Try char shortcuts.
+        switch (keyChar) {
+            case 'c':
+                handleButton(CalculatorButton.CLEAR);
+                return;
+            case '*':
+            case 'x':
+                handleButton(CalculatorButton.TIMES);
+                return;
+            case '/':
+                handleButton(CalculatorButton.DIVIDED_BY);
+                return;
+        }
 
-		for (int i = 4; i < 8; i++)
-			row[2].add(button[i]);
-		row[2].add(button[15]);
-		add(row[2]);
+        int keyCode = e.getExtendedKeyCode();
 
-		for (int i = 8; i < 12; i++)
-			row[3].add(button[i]);
-		row[3].add(button[16]);
-		add(row[3]);
+        if (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_ACCEPT) {
+            handleButton(CalculatorButton.EQUALS);
+        } else if (keyCode == KeyEvent.VK_ESCAPE) {
+            handleButton(CalculatorButton.CLEAR);
+        }
+    }
 
-		row[4].add(button[18]);
-		for (int i = 12; i < 14; i++)
-			row[4].add(button[i]);
-		row[4].add(button[17]);
-		add(row[4]);
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // See keyTyped() handler.
+    }
 
-		setVisible(true);
-	}
-
-	public void clear() {
-		try {
-			display.setText("");
-			for (int i = 0; i < 4; i++)
-
-				function[i] = false;
-			for (int i = 0; i < 2; i++)
-				temp[i] = 0;
-		} catch (NullPointerException e) {
-		}
-	}
-
-	public void getSqrt() {
-		try {
-			double value = Math.sqrt(Double.parseDouble(display.getText()));
-			display.setText(Double.toString(value));
-		} catch (NumberFormatException e) {
-		}
-	}
-
-	public void getPosNeg() {
-		try {
-			double value = Double.parseDouble(display.getText());
-			if (value != 0) {
-				value = value * (-1);
-				display.setText(Double.toString(value));
-			} else {
-			}
-		} catch (NumberFormatException e) {
-		}
-	}
-
-	public void getResult() {
-		double result = 0;
-		temp[1] = Double.parseDouble(display.getText());
-		String temp0 = Double.toString(temp[0]);
-		String temp1 = Double.toString(temp[1]);
-		try {
-			if (temp0.contains("-")) {
-				String[] temp00 = temp0.split("-", 2);
-				temp[0] = (Double.parseDouble(temp00[1]) * -1);
-			}
-			if (temp1.contains("-")) {
-				String[] temp11 = temp1.split("-", 2);
-				temp[1] = (Double.parseDouble(temp11[1]) * -1);
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-		}
-		try {
-			if (function[2] == true)
-				result = temp[0] * temp[1];
-			else if (function[3] == true)
-				result = temp[0] / temp[1];
-			else if (function[0] == true)
-				result = temp[0] + temp[1];
-			else if (function[1] == true)
-				result = temp[0] - temp[1];
-			display.setText(Double.toString(result));
-			for (int i = 0; i < 4; i++)
-
-				function[i] = false;
-		} catch (NumberFormatException e) {
-		}
-	}
-
-	public final void setDesign() {
-		try {
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Exception e) {
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent ev) {
-		if (ev.getSource() == button[0])
-			display.append("7");
-		if (ev.getSource() == button[1])
-			display.append("8");
-		if (ev.getSource() == button[2])
-			display.append("9");
-		if (ev.getSource() == button[3]) {
-			temp[0] = Double.parseDouble(display.getText());
-
-			function[0] = true;
-			display.setText("");
-		}
-		if (ev.getSource() == button[4])
-			display.append("4");
-		if (ev.getSource() == button[5])
-			display.append("5");
-		if (ev.getSource() == button[6])
-			display.append("6");
-		if (ev.getSource() == button[7]) {
-			temp[0] = Double.parseDouble(display.getText());
-
-			function[1] = true;
-			display.setText("");
-		}
-		if (ev.getSource() == button[8])
-			display.append("1");
-		if (ev.getSource() == button[9])
-			display.append("2");
-		if (ev.getSource() == button[10])
-			display.append("3");
-		if (ev.getSource() == button[11]) {
-			temp[0] = Double.parseDouble(display.getText());
-
-			function[2] = true;
-			display.setText("");
-		}
-		if (ev.getSource() == button[12])
-			display.append(".");
-		if (ev.getSource() == button[13]) {
-			temp[0] = Double.parseDouble(display.getText());
-
-			function[3] = true;
-			display.setText("");
-		}
-		if (ev.getSource() == button[14])
-			clear();
-		if (ev.getSource() == button[15])
-			getSqrt();
-		if (ev.getSource() == button[16])
-			getPosNeg();
-		if (ev.getSource() == button[17])
-			getResult();
-		if (ev.getSource() == button[18])
-			display.append("0");
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // See keyTyped() handler.
+    }
 }
