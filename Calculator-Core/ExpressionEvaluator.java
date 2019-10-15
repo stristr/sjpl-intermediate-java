@@ -94,16 +94,19 @@ class ExpressionEvaluator {
             case NINE:
             case DECIMAL:
                 activeOperand.add(button);
-                break;
+                return;
             case CLEAR:
                 clear();
-                break;
+                return;
             case PLUS:
             case MINUS:
             case TIMES:
             case DIVIDED_BY:
             case EXPONENT:
             case MODULO:
+                if (leftOperand.isEmpty()) {
+                    return;
+                }
                 if (activeOperand == rightOperand && !rightOperand.isEmpty()) {
                     evaluate();
                 }

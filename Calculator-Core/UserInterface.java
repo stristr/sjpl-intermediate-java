@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class UserInterface extends JFrame implements ActionListener, KeyListener {
     private JTextPane display = new JTextPane();
