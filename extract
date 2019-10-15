@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+if [[ $# != 1 ]]; then
+    echo "usage: ./extract <patch>"
+    exit 1
+fi
+
+if [[ $(git diff) != "" ]]; then
+    echo "unable to extract with changes in the working tree"
+    exit 1
+fi
+
+PATCH_FILE="patches/$1.diff"
+if [ ! -f "$PATCH_FILE" ]; then
+    echo "no patch found at $PATCH_FILE"
+    exit 1
+fi
+
+LAB_DIRECTORY="labs/$1"
+if [ -d $LAB_DIRECTORY ]; then
+    echo "a lab directory already exists at $LAB_DIRECTORY. Please remove it first."
+    exit 1
+fi
+
+# Show what we're doing first.
+git apply --stat "$PATCH_FILE"
+git apply "$PATCH_FILE"
+
+mkdir -p "$LAB_DIRECTORY"
+
+for directory in $(find . -name "*-Core" -depth 1); do
+    if [[ $(git diff "$directory") != "" ]]; then
+        DESTINATION="$LAB_DIRECTORY/${directory/-Core/}"
+        cp -r "$directory" "$DESTINATION"
+    fi
+done
+
+git add labs
+git clean -dfx labs
+git reset --mixed
+git checkout .
+
+echo "success! the lab has been extracted to $LAB_DIRECTORY"

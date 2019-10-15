@@ -1,0 +1,57 @@
+diff --git a/Calculator-Core/BooleanOperator.java b/Calculator-Core/BooleanOperator.java
+index c2b9d8f..99c218c 100644
+--- a/Calculator-Core/BooleanOperator.java
++++ b/Calculator-Core/BooleanOperator.java
+@@ -3,28 +3,28 @@ class BooleanOperator {
+      * Add a and b.
+      */
+     static double add(double a, double b) {
+-        return a + b;
++        return 0;
+     }
+ 
+     /**
+      * Subtract b from a.
+      */
+     static double subtract(double a, double b) {
+-        return a - b;
++        return 0;
+     }
+ 
+     /**
+      * Multiply a and b.
+      */
+     static double multiply(double a, double b) {
+-        return a * b;
++        return 0;
+     }
+ 
+     /**
+      * Divide a by b.
+      */
+     static double divide(double a, double b) {
+-        return a / b;
++        return 0;
+     }
+ 
+     /**
+@@ -38,17 +38,13 @@ class BooleanOperator {
+      * Raise a to the power of b when b is an integer.
+      */
+     static double intPower(double a, int b) {
+-        double result = 1;
+-        for (int i = 0; i < b; ++i) {
+-            result *= a;
+-        }
+-        return result;
++        return 0;
+     }
+ 
+     /**
+      * Return the value of a modulo b.
+      */
+     static double modulate(double a, double b) {
+-        return a % b;
++        return 0;
+     }
+ }
