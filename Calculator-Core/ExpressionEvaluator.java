@@ -46,6 +46,7 @@ class ExpressionEvaluator {
         DecimalFormat formatter = new DecimalFormat("###.#################");
 
         leftOperand.reset(formatter.format(value).chars().mapToObj(c -> (char) c).collect(Collectors.toList()));
+        leftOperand.isFrozen = true;
     }
 
     private void evaluate() {
@@ -93,6 +94,9 @@ class ExpressionEvaluator {
             case EIGHT:
             case NINE:
             case DECIMAL:
+                if (activeOperand.isFrozen) {
+                    clear();
+                }
                 activeOperand.add(button);
                 return;
             case CLEAR:

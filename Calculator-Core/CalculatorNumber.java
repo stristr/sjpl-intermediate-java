@@ -4,10 +4,12 @@ import java.util.Collection;
 class CalculatorNumber {
     private ArrayList<Character> characters = new ArrayList<>();
     private int decimalPosition = -1;
+    boolean isFrozen = false;
 
     void clear() {
         characters.clear();
         decimalPosition = -1;
+        isFrozen = false;
     }
 
     void reset(Collection<Character> collection) {
