@@ -48,9 +48,18 @@ class CalculatorNumber {
     }
 
     double getValue() {
-        return Double.parseDouble(
-                characters.stream().map(Object::toString).reduce(
-                        (accumulator, character) -> accumulator + character).get());
+        String doubleAsString = characters.stream().map(Object::toString).reduce(
+                (accumulator, character) -> accumulator + character).get();
+
+        if (doubleAsString.equals("∞")) {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        if (doubleAsString.equals("-∞")) {
+            return Double.NEGATIVE_INFINITY;
+        }
+
+        return Double.parseDouble(doubleAsString);
     }
 
     String getDisplay() {

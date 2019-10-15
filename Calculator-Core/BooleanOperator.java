@@ -35,6 +35,17 @@ class BooleanOperator {
     }
 
     /**
+     * Raise a to the power of b when b is an integer.
+     */
+    static double intPower(double a, int b) {
+        double result = 1;
+        for (int i = 0; i < b; ++i) {
+            result *= a;
+        }
+        return result;
+    }
+
+    /**
      * Return the value of a modulo b.
      */
     static double modulate(double a, double b) {

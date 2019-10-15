@@ -32,11 +32,6 @@ class ExpressionEvaluator {
     }
 
     private void updateLeftOperand(double value) {
-        if (Double.isInfinite(value) || Double.isNaN(value)) {
-            leftOperand.clear();
-            return;
-        }
-
         String valueAsString = Double.toString(value);
         if (valueAsString.contains("E") || valueAsString.contains("e")) {
             leftOperand.reset(valueAsString.chars().mapToObj(c -> (char) c).collect(Collectors.toList()));
@@ -68,7 +63,11 @@ class ExpressionEvaluator {
                     updateLeftOperand(BooleanOperator.divide(leftValue, rightValue));
                     break;
                 case EXPONENT:
-                    updateLeftOperand(BooleanOperator.power(leftValue, rightValue));
+                    if (rightValue == (int) rightValue) {
+                        updateLeftOperand(BooleanOperator.intPower(leftValue, (int) rightValue));
+                    } else {
+                        updateLeftOperand(BooleanOperator.power(leftValue, rightValue));
+                    }
                     break;
                 case MODULO:
                     updateLeftOperand(BooleanOperator.modulate(leftValue, rightValue));
