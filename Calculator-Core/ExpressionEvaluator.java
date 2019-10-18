@@ -44,36 +44,37 @@ class ExpressionEvaluator {
         leftOperand.isFrozen = true;
     }
 
-    private void evaluate() {
+    private double evaluateExpression() {
         if (operation != null && !rightOperand.isEmpty()) {
             // Evaluate the expression.
             double leftValue = leftOperand.getValue();
             double rightValue = rightOperand.getValue();
             switch (operation) {
                 case PLUS:
-                    updateLeftOperand(BooleanOperator.add(leftValue, rightValue));
-                    break;
+                    return BooleanOperator.add(leftValue, rightValue);
                 case MINUS:
-                    updateLeftOperand(BooleanOperator.subtract(leftValue, rightValue));
-                    break;
+                    return BooleanOperator.subtract(leftValue, rightValue);
                 case TIMES:
-                    updateLeftOperand(BooleanOperator.multiply(leftValue, rightValue));
-                    break;
+                    return BooleanOperator.multiply(leftValue, rightValue);
                 case DIVIDED_BY:
-                    updateLeftOperand(BooleanOperator.divide(leftValue, rightValue));
-                    break;
+                    return BooleanOperator.divide(leftValue, rightValue);
                 case EXPONENT:
                     if (rightValue == (int) rightValue) {
-                        updateLeftOperand(BooleanOperator.intPower(leftValue, (int) rightValue));
+                        return BooleanOperator.intPower(leftValue, (int) rightValue);
                     } else {
-                        updateLeftOperand(BooleanOperator.power(leftValue, rightValue));
+                        return BooleanOperator.power(leftValue, rightValue);
                     }
-                    break;
                 case MODULO:
-                    updateLeftOperand(BooleanOperator.modulate(leftValue, rightValue));
-                    break;
+                    return BooleanOperator.modulus(leftValue, rightValue);
             }
         }
+
+        return leftOperand.getValue();
+    }
+
+    private void evaluate() {
+        double expressionValue = evaluateExpression();
+        updateLeftOperand(expressionValue);
 
         operation = null;
         activeOperand = leftOperand;

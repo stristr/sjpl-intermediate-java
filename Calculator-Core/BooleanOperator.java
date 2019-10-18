@@ -48,7 +48,7 @@ class BooleanOperator {
     /**
      * Return the value of a modulo b.
      */
-    static double modulate(double a, double b) {
+    static double modulus(double a, double b) {
         return a % b;
     }
 }
