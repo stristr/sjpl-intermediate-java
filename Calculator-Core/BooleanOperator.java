@@ -24,6 +24,10 @@ class BooleanOperator {
      * Divide a by b.
      */
     static double divide(double a, double b) {
+        if (b == 0) {
+            return 0;
+        }
+
         return a / b;
     }
 
@@ -49,6 +53,10 @@ class BooleanOperator {
      * Return the value of a modulo b.
      */
     static double modulus(double a, double b) {
+        if (b == 0) {
+            return 0;
+        }
+
         return a % b;
     }
 }

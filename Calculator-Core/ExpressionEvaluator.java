@@ -74,6 +74,9 @@ class ExpressionEvaluator {
 
     private void evaluate() {
         double expressionValue = evaluateExpression();
+        if (Double.isInfinite(expressionValue) || Double.isNaN(expressionValue)) {
+            throw new ArithmeticException();
+        }
         updateLeftOperand(expressionValue);
 
         operation = null;
