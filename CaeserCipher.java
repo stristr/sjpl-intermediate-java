@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-class CaeserCypher {
+class CaeserCipher {
     public static char[] caeserEncrypt(char[] text, int shift) {
     int n = text.length;
     char[] encrypted = new char [n];
