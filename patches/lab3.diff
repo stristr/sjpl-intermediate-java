@@ -1,0 +1,204 @@
+diff --git a/Concentration-Core/Card.java b/Concentration-Core/Card.java
+index ebb4630..62c227c 100644
+--- a/Concentration-Core/Card.java
++++ b/Concentration-Core/Card.java
+@@ -2,34 +2,47 @@ import java.awt.*;
+ 
+ public class Card
+ {
++    // Color assigned to card when it is flipped face up
+     private final Color color;
++
++    // Indicates whether card is currently face up
+     private boolean isFaceUp;
++
++    // Indicates whether card has been matched with another card
+     private boolean isMatched;
+     
+     public Card(Color color)
+     {
+         this.color = color;
+-        this.isFaceUp = false;
++
++	/* Adjust the values assigned to isFaceUp and isMatched when a card is initialized based 
++	   on your intuition about the properties of a card at the beginning of the game */
++
++        this.isFaceUp = true;
+         this.isMatched = false;
+     }
+     
+     public boolean isFaceUp() {
+-        return this.isFaceUp;
++	// Return appropriate value
++        return false;
+     }
+     
+     public Color getColor() {
+-        return this.color;
++	// Return appropriate value
++        return Color.WHITE;
+     }
+     
+     public boolean isMatched() {
+-        return this.isMatched;
++	// Return appropriate value
++        return false;
+     }
+     
+     public void setMatched(boolean matched) {
+-        this.isMatched = matched;
++    	// Assign value of the boolean matched to the isMatched property of card
+     }
+     
+     public void flip() {
+-        this.isFaceUp = !this.isFaceUp;
++	/* Write a method to flip a card (if card is face up, it should be changed to face down and vice versa)
++	   Hint: the code can be written in one line */
+     }
+ }
+diff --git a/Concentration-Core/ConcentrationModel.java b/Concentration-Core/ConcentrationModel.java
+index 1d2b0bb..e693e4d 100644
+--- a/Concentration-Core/ConcentrationModel.java
++++ b/Concentration-Core/ConcentrationModel.java
+@@ -7,8 +7,14 @@ public class ConcentrationModel
+     public static final int BOARD_SIZE = 4;
+     public static final int NUM_CARDS = BOARD_SIZE*BOARD_SIZE;
+     public static final int NUM_PAIRS = NUM_CARDS/2;
++
++    // List of all cards in game
+     private ArrayList<Card> cards;
++
++    // List of all currently face up cards that have not been matched yet
+     private ArrayList<Card> faceUpUnmatchedCards;
++
++    // List of colors used for cards
+     public static ArrayList<Color> colors;
+     
+     public ConcentrationModel()
+@@ -30,22 +36,20 @@ public class ConcentrationModel
+             this.cards.add(card1);
+             this.cards.add(card2);
+         }
+-        Collections.shuffle(this.cards);
++        Collections.shuffle(this.cards); // Shuffles cards to randomize the arrangement of colors on the board
+     }
+-    
++
++    // Method that updates the properties of cards on the board when a card is selected
++
+     public void selectCard(int n) {
+         Card selectedCard = cards.get(n);
+-        if (!selectedCard.isFaceUp()) {
++        if (true) {  // Edit this if statement, considering what needs to be true about the selected card for the move to be valid
+             if (faceUpUnmatchedCards.size() == 2) {
+                 Card card1 = faceUpUnmatchedCards.get(0);
+                 Card card2 = faceUpUnmatchedCards.get(1);
+-                if (!card1.isMatched()) {
+-                    card1.flip();
+-                    card2.flip();
+-                }
+-                faceUpUnmatchedCards.clear();
+-                selectedCard.flip();
+-                faceUpUnmatchedCards.add(selectedCard);
++
++		/* Flip back currently face up cards card1 and card2 if they are not matched, update the list of 
++		   currently face up and unmatched cards, and handle the flipping of the next card at index n */
+             } else if (faceUpUnmatchedCards.size() == 1) {
+                 selectedCard.flip();
+                 faceUpUnmatchedCards.add(selectedCard);
+@@ -58,23 +62,14 @@ public class ConcentrationModel
+     }
+     
+     private void checkMatch() {
+-        Card card1 = faceUpUnmatchedCards.get(0);
+-        Card card2 = faceUpUnmatchedCards.get(1);
+-        if (card1.getColor() == card2.getColor()) {
+-            card1.setMatched(true);
+-            card2.setMatched(true);
+-        }
++        // Write method to set first two cards in faceUpUnmatchedCards as matched if they have the same color value
+     }
+     
+     public void reset() {
+-        for (Card card: cards) {
+-            if (card.isFaceUp()) {
+-                card.flip();
+-            }
+-            card.setMatched(false);
+-        }
+-        Collections.shuffle(cards);
+-        faceUpUnmatchedCards.clear();
++        /* Reset all cards to their default state (consider whether or not they would be face up or matched at the start of the game) 
++	   and update the list of currently face up and unmatched cards */
++
++        Collections.shuffle(cards); // Shuffles cards to randomize the arrangement of colors on the board upon reset
+     }
+     
+     public ArrayList<Card> getCards() {
+diff --git a/Concentration-Core/package.bluej b/Concentration-Core/package.bluej
+index a0c1ef7..6197008 100644
+--- a/Concentration-Core/package.bluej
++++ b/Concentration-Core/package.bluej
+@@ -1,29 +1,29 @@
+ #BlueJ package file
+-dependency1.from=GViewControl
+-dependency1.to=ConcentrationModel
++dependency1.from=ConcentrationModel
++dependency1.to=Card
+ dependency1.type=UsesDependency
+ dependency2.from=GViewControl
+-dependency2.to=Card
++dependency2.to=ConcentrationModel
+ dependency2.type=UsesDependency
+-dependency3.from=ConcentrationModel
++dependency3.from=GViewControl
+ dependency3.to=Card
+ dependency3.type=UsesDependency
+-editor.fx.0.height=1041
+-editor.fx.0.width=1721
+-editor.fx.0.x=-7
+-editor.fx.0.y=-7
+-objectbench.height=94
++editor.fx.0.height=737
++editor.fx.0.width=814
++editor.fx.0.x=446
++editor.fx.0.y=96
++objectbench.height=216
+ objectbench.width=1682
+ package.divider.horizontal=0.6
+-package.divider.vertical=0.8932107496463932
+-package.editor.height=835
++package.divider.vertical=0.7627298444130127
++package.editor.height=712
+ package.editor.width=1594
+ package.editor.x=0
+ package.editor.y=0
+ package.frame.height=1041
+ package.frame.width=1721
+ package.numDependencies=3
+-package.numTargets=4
++package.numTargets=3
+ package.showExtends=true
+ package.showUses=true
+ project.charset=UTF-8
+@@ -47,16 +47,9 @@ target2.width=110
+ target2.x=50
+ target2.y=270
+ target3.height=50
+-target3.name=ActionPerformed
++target3.name=Card
+ target3.showInterface=false
+ target3.type=ClassTarget
+-target3.width=130
+-target3.x=40
+-target3.y=190
+-target4.height=50
+-target4.name=Card
+-target4.showInterface=false
+-target4.type=ClassTarget
+-target4.width=80
+-target4.x=70
+-target4.y=10
++target3.width=80
++target3.x=70
++target3.y=10
