@@ -2,11 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Game extends javax.swing.JFrame {
-    public static ArrayList<JButton> buttons;
-    public Model model;
+class Game extends javax.swing.JFrame {
+    private static ArrayList<JButton> buttons;
+    private Model model;
+    private JTextField victory = new JTextField("              ");
 
-    public Game(Model model) {
+    Game(Model model) {
         this.model = model;
         initialize();
     }
@@ -21,11 +22,12 @@ public class Game extends javax.swing.JFrame {
             buttons.add(new JButton());
             buttons.get(i).setPreferredSize(new Dimension(100, 100));
             buttons.get(i).setName(String.valueOf(i));
-            buttons.get(i).setBackground(Color.WHITE);
             buttons.get(i).setBorderPainted(false);
             buttons.get(i).setContentAreaFilled(false);
             buttons.get(i).setOpaque(true);
         }
+
+        redraw();
 
         JFrame frame = new JFrame();
         frame.setSize(500, 500);
@@ -35,6 +37,12 @@ public class Game extends javax.swing.JFrame {
             panel.add(but);
         }
         bottomPanel.add(reset, BorderLayout.EAST);
+        victory.setOpaque(true);
+        victory.setEditable(false);
+        victory.setBorder(null);
+        victory.setBackground(null);
+        bottomPanel.add(victory);
+
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(bottomPanel, BorderLayout.SOUTH);
         frame.add(panel, BorderLayout.CENTER);
@@ -43,9 +51,10 @@ public class Game extends javax.swing.JFrame {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        //reset Button will reset the screen to default
+        // Reset button will reset the screen to default.
         reset.addActionListener(e -> {
             model.reset();
+            victory.setText("");
             for (JButton btn : buttons) {
                 btn.setSelected(false);
                 btn.setBackground(Color.WHITE);
@@ -53,18 +62,27 @@ public class Game extends javax.swing.JFrame {
         });
 
         for (JButton btn : buttons) {
-
             btn.addActionListener(e -> {
                 model.selectCard(buttons.indexOf(btn));
-                btn.setBackground(model.getCards().get(buttons.indexOf(btn)).getColor());
-                for (int i = 0; i < 16; i++) {
-                    Card card = model.getCards().get(i);
-                    if (!card.isFaceUp()) {
-                        buttons.get(i).setBackground(Color.WHITE);
-                    }
-                }
+                redraw();
             });
         }
     }
 
+    void redraw() {
+        int matches = 0;
+        for (int i = 0; i < buttons.size(); i++) {
+            Card card = model.cards.get(i);
+            JButton btn = buttons.get(i);
+            if (card.isFaceUp) {
+                btn.setBackground(card.color);
+                matches++;
+            } else {
+                btn.setBackground(Color.WHITE);
+            }
+        }
+        if (matches == 16) {
+            victory.setText("You win!");
+        }
+    }
 }
