@@ -1,0 +1,47 @@
+diff --git a/Menagerie-Core/Bear.java b/Menagerie-Core/Bear.java
+deleted file mode 100644
+index 6036409..0000000
+--- a/Menagerie-Core/Bear.java
++++ /dev/null
+@@ -1,19 +0,0 @@
+-class Bear extends Animal {
+-    private String name;
+-
+-    Bear(String requestedName) {
+-        name = requestedName;
+-    }
+-
+-    String getName() {
+-        return name;
+-    }
+-
+-    String getSound() {
+-        return "Roaaaaarrr";
+-    }
+-
+-    String getPicture() {
+-        return "res/animals/bear.jpg";
+-    }
+-}
+diff --git a/Menagerie-Core/Farm.java b/Menagerie-Core/Farm.java
+index 76d802c..14b7dd7 100644
+--- a/Menagerie-Core/Farm.java
++++ b/Menagerie-Core/Farm.java
+@@ -12,6 +12,12 @@ class Farm {
+         menagerie.addAnimal(new Monkey());
+         menagerie.addAnimal(new Blobfish());
+         menagerie.addAnimal(new Dog());
+-        menagerie.addAnimal(new Bear("Grizzly"));
++
++        // The code we commented out below doesn't work because there is no Bear class.
++        // Can you make one?
++        // menagerie.addAnimal(new Bear());
++
++        // EXTRA CREDIT: can you design the Bear class so that you give the bear a name when you construct it?
++        // menagerie.addAnimal(new Bear("Cuddles"));
+     }
+ }
+diff --git a/Menagerie-Core/res/animals/bear.jpg b/Menagerie-Core/res/animals/bear.jpg
+deleted file mode 100644
+index e7b3e77..0000000
+Binary files a/Menagerie-Core/res/animals/bear.jpg and /dev/null differ
