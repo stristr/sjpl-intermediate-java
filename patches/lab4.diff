@@ -41,7 +41,3 @@ index 76d802c..14b7dd7 100644
 +        // menagerie.addAnimal(new Bear("Cuddles"));
      }
  }
-diff --git a/Menagerie-Core/res/animals/bear.jpg b/Menagerie-Core/res/animals/bear.jpg
-deleted file mode 100644
-index e7b3e77..0000000
-Binary files a/Menagerie-Core/res/animals/bear.jpg and /dev/null differ
