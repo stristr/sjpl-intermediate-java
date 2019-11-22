@@ -1,0 +1,154 @@
+diff --git a/Concentration-Core/Card.java b/Concentration-Core/Card.java
+index 41b6221..ea027b5 100644
+--- a/Concentration-Core/Card.java
++++ b/Concentration-Core/Card.java
+@@ -11,12 +11,12 @@ public class Card {
+     /**
+      * This boolean field says whether the card is matched or not. Initially, all cards should be unmatched.
+      */
+-    boolean isMatched = false;
++    private boolean isMatched = true;
+ 
+     /**
+      * On this field, the keyword "final" means the value of the card's color cannot change after it is constructed.
+      */
+-    final Color color;
++    final Color color = Color.WHITE;
+ 
+     /**
+      * This special method is the card constructor. It can be called like:
+@@ -26,14 +26,14 @@ public class Card {
+     public Card(Color color) {
+         // Fields can either be initialized where they're declared, like isFaceUp and isMatched, or they can be
+         // initialized in class constructors.
+-        this.color = color;
++        color = this.color;
+     }
+ 
+     /**
+      * This method is responsible for noting when a card has been matched.
+      */
+     void setMatched() {
+-        isMatched = true;
++        isMatched = false;
+     }
+ 
+     /**
+@@ -45,7 +45,9 @@ public class Card {
+      * use color1 == color2.
+      */
+     boolean equals(Card other) {
+-        return color.equals(other.color);
++        if (color.equals(other.color)) {
++            return true;
++        }
+     }
+ 
+     /**
+@@ -53,6 +55,6 @@ public class Card {
+      * is what happens when you flip a card in a card game.
+      */
+     void flip() {
+-        isFaceUp = !isFaceUp;
++        return !isFaceUp;
+     }
+ }
+diff --git a/Concentration-Core/Model.java b/Concentration-Core/Model.java
+index e1c45b3..1e908c2 100644
+--- a/Concentration-Core/Model.java
++++ b/Concentration-Core/Model.java
+@@ -7,21 +7,21 @@ public class Model {
+     private static final int NUM_CARDS = BOARD_SIZE * BOARD_SIZE;
+     private static final int NUM_PAIRS = NUM_CARDS / 2;
+     ArrayList<Card> cards = new ArrayList<>();
+-    private ArrayList<Card> faceUpUnmatchedCards = new ArrayList<>();
++    private ArrayList<Card> faceUpUnmatchedCards = new ArrayList<>()
+ 
+     public Model() {
+         reset();
+-    }
++    
+ 
+     void selectCard(int n) {
+-        Card selectedCard = cards.get(n);
++        card selectedCard = cards.get(n);
+         if (selectedCard.isFaceUp) {
+             return;
+         }
+ 
+         if (faceUpUnmatchedCards.size() == 2) {
+-            Card card1 = faceUpUnmatchedCards.get(0);
+-            Card card2 = faceUpUnmatchedCards.get(1);
++            Card card1 == faceUpUnmatchedCards.get(0);
++            Card card2 == faceUpUnmatchedCards.get(1);
+             if (!card1.isMatched) {
+                 card1.flip();
+                 card2.flip();
+@@ -40,9 +40,9 @@ public class Model {
+         }
+     }
+ 
+-    private void checkMatch() {
+-        Card card1 = faceUpUnmatchedCards.get(0);
+-        Card card2 = faceUpUnmatchedCards.get(1);
++    private checkMatch() {
++        Card card1 == faceUpUnmatchedCards.get(0);
++        Card card2 == faceUpUnmatchedCards.get(1);
+         if (card1.equals(card2)) {
+             card1.setMatched();
+             card2.setMatched();
+@@ -50,10 +50,10 @@ public class Model {
+     }
+ 
+     void reset() {
+-        Color[] colors = {Color.GREEN, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.CYAN, Color.RED, Color.GRAY, Color.MAGENTA};
++        Color colors = {Color.GREEN, Color.BLUE, Color.ORANGE, Color.YELLOW, Color.CYAN, Color.RED, Color.GRAY, Color.MAGENTA};
+         cards.clear();
+         faceUpUnmatchedCards.clear();
+-        for (int n = 0; n < NUM_PAIRS; ++n) {
++        for (int n = 0; n <= NUM_PAIRS; ++n) {
+             cards.add(new Card(colors[n]));
+             cards.add(new Card(colors[n]));
+         }
+diff --git a/Concentration-Core/package.bluej b/Concentration-Core/package.bluej
+index 07ab83c..f3d469f 100644
+--- a/Concentration-Core/package.bluej
++++ b/Concentration-Core/package.bluej
+@@ -1,23 +1,23 @@
+ #BlueJ package file
+-dependency1.from=Model
+-dependency1.to=Card
++dependency1.from=Concentration
++dependency1.to=Game
+ dependency1.type=UsesDependency
+ dependency2.from=Concentration
+-dependency2.to=Game
++dependency2.to=Model
+ dependency2.type=UsesDependency
+-dependency3.from=Concentration
+-dependency3.to=Model
++dependency3.from=Model
++dependency3.to=Card
+ dependency3.type=UsesDependency
+-editor.fx.0.height=0
+-editor.fx.0.width=0
+-editor.fx.0.x=0
+-editor.fx.0.y=0
+-objectbench.height=140
+-objectbench.width=1656
++editor.fx.0.height=1041
++editor.fx.0.width=1721
++editor.fx.0.x=-7
++editor.fx.0.y=-7
++objectbench.height=176
++objectbench.width=1642
+ package.divider.horizontal=0.6
+-package.divider.vertical=0.848297213622291
+-package.editor.height=815
+-package.editor.width=1562
++package.divider.vertical=0.8022254127781766
++package.editor.height=738
++package.editor.width=1554
+ package.editor.x=0
+ package.editor.y=23
+ package.frame.height=1027
