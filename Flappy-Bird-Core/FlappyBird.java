@@ -25,7 +25,7 @@ public class FlappyBird implements ActionListener, KeyListener {
         frame = new JFrame("Flappy Bird");
         bird = new Bird();
         rects = new ArrayList<>();
-        panel = new GamePanel(this, bird, rects);
+        panel = new UserInterface(this, bird, rects);
         frame.add(panel);
 
         frame.setSize(WIDTH, HEIGHT);
@@ -38,30 +38,17 @@ public class FlappyBird implements ActionListener, KeyListener {
         new Timer(1000 / FPS, this).start();
     }
 
-    enum RectangleRole {
-        TOP,
-        BOTTOM,
-    }
-
-    static class Rectangle extends java.awt.Rectangle {
-        RectangleRole role;
-        Rectangle(int x, int y, int width, int height, RectangleRole role) {
-            super(x, y, width, height);
-            this.role = role;
-        }
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         panel.repaint();
         if (!paused) {
             bird.fly();
             if (scroll % 90 == 0) {
-                Rectangle r = new Rectangle(WIDTH, 0, GamePanel.PIPE_W, (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT), RectangleRole.TOP);
+                Rectangle topPipe = new Rectangle(WIDTH, 0, UserInterface.PIPE_W, (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT), RectangleRole.TOP);
                 int h2 = (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT);
-                Rectangle r2 = new Rectangle(WIDTH, HEIGHT - h2, GamePanel.PIPE_W, h2, RectangleRole.BOTTOM);
-                rects.add(r);
-                rects.add(r2);
+                Rectangle bottomPipe = new Rectangle(WIDTH, HEIGHT - h2, UserInterface.PIPE_W, h2, RectangleRole.BOTTOM);
+                rects.add(topPipe);
+                rects.add(bottomPipe);
             }
             ArrayList<Rectangle> toRemove = new ArrayList<>();
             boolean game = true;
@@ -80,7 +67,7 @@ public class FlappyBird implements ActionListener, KeyListener {
             time++;
             scroll++;
 
-            if (bird.y > HEIGHT || bird.y + bird.RAD < 0) {
+            if (bird.y > HEIGHT || bird.y + Bird.radius < 0) {
                 game = false;
             }
 
@@ -107,14 +94,27 @@ public class FlappyBird implements ActionListener, KeyListener {
     }
 
     public void keyReleased(KeyEvent e) {
-
+        // See keyPressed().
     }
 
     public void keyTyped(KeyEvent e) {
-
+        // See keyPressed().
     }
 
     public boolean paused() {
         return paused;
+    }
+
+    enum RectangleRole {
+        TOP, BOTTOM,
+    }
+
+    static class Rectangle extends java.awt.Rectangle {
+        RectangleRole role;
+
+        Rectangle(int x, int y, int width, int height, RectangleRole role) {
+            super(x, y, width, height);
+            this.role = role;
+        }
     }
 }
