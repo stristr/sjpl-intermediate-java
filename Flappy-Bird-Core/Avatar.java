@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 // Avatar is the base class for Bird.
 // It implements the basic physics of the Flappy Bird game.
@@ -24,27 +23,29 @@ public class Avatar {
     public float jumpHeight;
 
     // The image used to draw the Avatar.
-    protected Image image;
+    Image image;
 
     // The amount the Avatar should be rotated when it draws.
-    private double rotation;
+    double rotation;
 
     /**
      * Resets the Avatar to the center of the screen.
      */
     public void reset() {
-        x = FlappyBird.WIDTH / 2;
-        y = FlappyBird.HEIGHT / 2;
+        x = FlappyBird.width / 2;
+        y = FlappyBird.height / 2;
         velocity = 0;
         rotation = 0;
     }
 
     /**
-     * fly() updates y, velocity, and rotation according to gravity.
+     * go() updates y, velocity, and rotation according to gravity.
      */
-    public void fly() {
+    public void go() {
         y += velocity;
         velocity += gravity;
+
+        // What happens if you play with the numbers here?
         rotation = Math.min(Math.max(velocity, -8), 32) / 16;
     }
 
@@ -58,7 +59,7 @@ public class Avatar {
     /**
      * intersects(Rectangle r) checks if the Avatar intersects r.
      */
-    public final boolean intersects(Rectangle r) {
+    public final boolean collidesWith(Rectangle r) {
         int[][] corners = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
         for (int[] corner : corners) {
             if (r.contains(x + radius * corner[0], y + radius * corner[1])) {
@@ -67,20 +68,5 @@ public class Avatar {
         }
 
         return false;
-    }
-
-    /**
-     * update(Graphics2D g) redraws the Avatar on the screen.
-     */
-    public void update(Graphics2D g) {
-        AffineTransform old = g.getTransform();
-        g.setColor(Color.BLACK);
-        g.rotate(Math.toRadians(45 * rotation), x, y);
-        if (image != null) {
-            g.drawImage(image, Math.round(x - radius), Math.round(y - radius), 2 * radius, 2 * radius, null);
-        } else {
-            g.drawRect(Math.round(x - radius), Math.round(y - radius), 2 * radius, 2 * radius);
-        }
-        g.setTransform(old);
     }
 }

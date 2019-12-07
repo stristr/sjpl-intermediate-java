@@ -9,15 +9,23 @@ import java.text.AttributedString;
 import java.util.ArrayList;
 
 public class UserInterface extends JPanel {
+    // This is the background color of the game.
+    // What happens if you change the constructor arguments?
     public static final Color bg = new Color(0, 158, 158);
+
+    // These are the dimensions of the pipe. What happens if you change them?
     public static final int PIPE_W = 50, PIPE_H = 30;
-    private Avatar avatar;
-    private ArrayList<FlappyBird.Rectangle> rects;
+
+    // These are the fonts used for the score and the pause screen.
+    // Can you change the fonts used in the game?
     private static Font scoreFont = new Font("Comic Sans MS", Font.BOLD, 18);
     private static Font pauseFont = new Font("Arial", Font.BOLD, 48);
+
+    private Avatar avatar;
+    private ArrayList<Pipe> rects;
     private Image pipeHead, pipeLength;
 
-    public UserInterface(Avatar avatar, ArrayList<FlappyBird.Rectangle> rects) {
+    public UserInterface(Avatar avatar, ArrayList<Pipe> rects) {
         this.avatar = avatar;
         this.rects = rects;
 
@@ -29,44 +37,89 @@ public class UserInterface extends JPanel {
         }
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        g.setColor(bg);
-        g.fillRect(0, 0, FlappyBird.WIDTH, FlappyBird.HEIGHT);
-        Graphics2D g2d = (Graphics2D) g;
-        AffineTransform old = g2d.getTransform();
-        avatar.update(g2d);
-        g.setColor(Color.RED);
-        for (FlappyBird.Rectangle r : rects) {
-            g2d.setColor(Color.GREEN);
-            g2d.translate(r.x + PIPE_W / 2, r.y + PIPE_H / 2);
-            if (r.y < FlappyBird.HEIGHT / 2) {
-                g2d.translate(0, r.height);
-                g2d.rotate(Math.PI);
-            }
-
-            g2d.drawImage(pipeLength, -PIPE_W / 2, PIPE_H / 2, UserInterface.PIPE_W, r.height, null);
-
-            if (r.role == FlappyBird.RectangleRole.BOTTOM) {
-                g2d.drawImage(pipeHead, -PIPE_W / 2, -PIPE_H / 2, UserInterface.PIPE_W, UserInterface.PIPE_H, null);
-            } else {
-                g2d.drawImage(pipeHead, -PIPE_W / 2, PIPE_H / 2, UserInterface.PIPE_W, UserInterface.PIPE_H, null);
-            }
-            g2d.setTransform(old);
-        }
-
+    /**
+     * This method draws the score in the top right of the screen.
+     * Why is this method "static" but drawPipes() is not?
+     */
+    static void drawScore(Graphics g) {
         AttributedString score = new AttributedString(" Score: " + FlappyBird.getScore() + " ");
         score.addAttribute(TextAttribute.BACKGROUND, Color.WHITE);
         score.addAttribute(TextAttribute.FONT, scoreFont);
         score.addAttribute(TextAttribute.FOREGROUND, Color.BLACK);
         g.drawString(score.getIterator(), 0, 20);
+    }
 
+    /**
+     * This method draws the pause screen.
+     * Why is this method "static" but drawPipes() is not?
+     */
+    static void drawPauseScreen(Graphics g) {
         if (FlappyBird.paused()) {
             g.setColor(Color.BLACK);
             g.setFont(pauseFont);
             g.setColor(new Color(0, 0, 0, 170));
-            g.drawString("PAUSED", FlappyBird.WIDTH / 2 - 100, FlappyBird.HEIGHT / 2 - 100);
-            g.drawString("PRESS SPACE TO GO", FlappyBird.WIDTH / 2 - 250, FlappyBird.HEIGHT / 2 + 50);
+            g.drawString("PAUSED", FlappyBird.width / 2 - 100, FlappyBird.height / 2 - 100);
+            g.drawString("PRESS SPACE TO GO", FlappyBird.width / 2 - 250, FlappyBird.height / 2 + 50);
         }
+    }
+
+    /**
+     * This method draws the Avatar.
+     */
+    void drawAvatar(Graphics2D g) {
+        AffineTransform old = g.getTransform();
+        g.setColor(Color.BLACK);
+
+        // This line of code rotates the bird according to the rotation stored on the avatar.
+        g.rotate(Math.toRadians(45 * avatar.rotation), avatar.x, avatar.y);
+
+        if (avatar.image != null) {
+            g.drawImage(avatar.image, Math.round(avatar.x - Avatar.radius), Math.round(avatar.y - Avatar.radius), 2 * Avatar.radius, 2 * Avatar.radius, null);
+        } else {
+            g.drawRect(Math.round(avatar.x - Avatar.radius), Math.round(avatar.y - Avatar.radius), 2 * Avatar.radius, 2 * Avatar.radius);
+        }
+
+        // Notice how we set the transform of the graphics back to what it was before it was rotated?
+        // What happens if we comment this line of code?
+        g.setTransform(old);
+    }
+
+    /**
+     * This method draws the pipes.
+     */
+    void drawPipes(Graphics2D g) {
+        g.setColor(Color.RED);
+        AffineTransform old = g.getTransform();
+        for (Pipe r : rects) {
+            g.setColor(Color.GREEN);
+            g.translate(r.x + PIPE_W / 2, r.y + PIPE_H / 2);
+            if (r.y < FlappyBird.height / 2) {
+                g.translate(0, r.height);
+                g.rotate(Math.PI);
+            }
+
+            g.drawImage(pipeLength, -PIPE_W / 2, PIPE_H / 2, UserInterface.PIPE_W, r.height, null);
+
+            if (r.position == Pipe.Position.BOTTOM) {
+                g.drawImage(pipeHead, -PIPE_W / 2, -PIPE_H / 2, UserInterface.PIPE_W, UserInterface.PIPE_H, null);
+            } else {
+                g.drawImage(pipeHead, -PIPE_W / 2, PIPE_H / 2, UserInterface.PIPE_W, UserInterface.PIPE_H, null);
+            }
+            g.setTransform(old);
+        }
+    }
+
+    /**
+     * This is the main method of this panel.
+     * It is triggered when GameLoop calls panel.repaint().
+     */
+    public void paintComponent(Graphics g) {
+        g.setColor(bg);
+        g.fillRect(0, 0, FlappyBird.width, FlappyBird.height);
+        Graphics2D g2d = (Graphics2D) g;
+        drawAvatar(g2d);
+        drawPipes(g2d);
+        drawScore(g);
+        drawPauseScreen(g);
     }
 }
