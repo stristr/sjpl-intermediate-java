@@ -5,103 +5,94 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class FlappyBird implements ActionListener, KeyListener {
+/**
+ * The FlappyBird class provides the entry point of the game.
+ */
+public class FlappyBird implements ActionListener {
+    // This is the frames per second of the game.
+    // What happens if you change it?
+    public static final int FPS = 60;
 
-    public static final int FPS = 60, WIDTH = 640, HEIGHT = 480;
+    public static final int WIDTH = 640;
+    public static final int HEIGHT = 480;
 
-    private Bird bird;
-    private JFrame frame;
+    // Can you make a class extension of Avatar other than Bird?
+    private Avatar avatar = new Bird();
+    private JFrame frame = new JFrame("Flappy Bird");
     private JPanel panel;
-    private ArrayList<Rectangle> rects;
-    private int time, scroll;
+    private ArrayList<Rectangle> pipes = new ArrayList<>();
 
-    private boolean paused;
+    private static int time, scroll;
+
+    static boolean paused;
 
     public static void main(String[] args) {
         new FlappyBird().go();
     }
 
     public void go() {
-        frame = new JFrame("Flappy Bird");
-        bird = new Bird();
-        rects = new ArrayList<>();
-        panel = new UserInterface(this, bird, rects);
+        panel = new UserInterface(avatar, pipes);
         frame.add(panel);
-
         frame.setSize(WIDTH, HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        frame.addKeyListener(this);
+        frame.addKeyListener(new Controls(avatar));
 
         paused = true;
 
         new Timer(1000 / FPS, this).start();
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) {
         panel.repaint();
-        if (!paused) {
-            bird.fly();
-            if (scroll % 90 == 0) {
-                Rectangle topPipe = new Rectangle(WIDTH, 0, UserInterface.PIPE_W, (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT), RectangleRole.TOP);
-                int h2 = (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT);
-                Rectangle bottomPipe = new Rectangle(WIDTH, HEIGHT - h2, UserInterface.PIPE_W, h2, RectangleRole.BOTTOM);
-                rects.add(topPipe);
-                rects.add(bottomPipe);
-            }
-            ArrayList<Rectangle> toRemove = new ArrayList<>();
-            boolean game = true;
-            for (Rectangle r : rects) {
-                r.x -= 3;
-                if (r.x + r.width <= 0) {
-                    toRemove.add(r);
-                }
+        if (paused) {
+            return;
+        }
 
-                if (bird.intersects(r)) {
-                    JOptionPane.showMessageDialog(frame, "You lose!\n" + "Your score was: " + time + ".");
-                    game = false;
-                }
+        avatar.fly();
+        if (scroll % 90 == 0) {
+            Rectangle topPipe = new Rectangle(WIDTH, 0, UserInterface.PIPE_W, (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT), RectangleRole.TOP);
+            int h2 = (int) ((Math.random() * HEIGHT) / 5f + (0.2f) * HEIGHT);
+            Rectangle bottomPipe = new Rectangle(WIDTH, HEIGHT - h2, UserInterface.PIPE_W, h2, RectangleRole.BOTTOM);
+            pipes.add(topPipe);
+            pipes.add(bottomPipe);
+        }
+        ArrayList<Rectangle> toRemove = new ArrayList<>();
+        boolean game = true;
+        for (Rectangle r : pipes) {
+            r.x -= 3;
+            if (r.x + r.width <= 0) {
+                toRemove.add(r);
             }
-            rects.removeAll(toRemove);
-            time++;
-            scroll++;
 
-            if (bird.y > HEIGHT || bird.y + Bird.radius < 0) {
+            if (avatar.intersects(r)) {
+                JOptionPane.showMessageDialog(frame, "You lose!\n" + "Your score was: " + time + ".");
                 game = false;
             }
+        }
+        pipes.removeAll(toRemove);
+        time++;
+        scroll++;
 
-            if (!game) {
-                rects.clear();
-                bird.reset();
-                time = 0;
-                scroll = 0;
-                paused = true;
-            }
+        if (avatar.y > HEIGHT || avatar.y + Avatar.radius < 0) {
+            JOptionPane.showMessageDialog(frame, "You lose!\n" + "Your score was: " + time + ".");
+            game = false;
+        }
+
+        if (!game) {
+            pipes.clear();
+            avatar.reset();
+            time = 0;
+            scroll = 0;
+            paused = true;
         }
     }
 
-    public int getScore() {
+    public static int getScore() {
         return time;
     }
 
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            bird.jump();
-        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            paused = false;
-        }
-    }
-
-    public void keyReleased(KeyEvent e) {
-        // See keyPressed().
-    }
-
-    public void keyTyped(KeyEvent e) {
-        // See keyPressed().
-    }
-
-    public boolean paused() {
+    public static boolean paused() {
         return paused;
     }
 

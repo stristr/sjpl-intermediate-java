@@ -34,7 +34,7 @@ public class Avatar {
      */
     public void reset() {
         x = FlappyBird.WIDTH / 2;
-        y = FlappyBird.WIDTH / 2;
+        y = FlappyBird.HEIGHT / 2;
         velocity = 0;
         rotation = 0;
     }
