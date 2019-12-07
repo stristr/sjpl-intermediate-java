@@ -12,7 +12,6 @@ public class FlappyBird {
     public static final int height = 480;
     // This is the velocity of pipes. What happens when you change it?
     public static final int pipeSpeed = 3;
-    static boolean paused;
     private static JFrame frame = new JFrame("Flappy Bird");
     // Can you make a class extension of Avatar other than Bird?
     private Avatar avatar = new Bird();
@@ -22,16 +21,8 @@ public class FlappyBird {
         new FlappyBird().go();
     }
 
-    public static int getScore() {
-        return GameLoop.time;
-    }
-
     public static void lose() {
         JOptionPane.showMessageDialog(frame, "You lose!\n" + "Your score was: " + GameLoop.time + ".");
-    }
-
-    public static boolean paused() {
-        return paused;
     }
 
     public void go() {
@@ -41,8 +32,6 @@ public class FlappyBird {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.addKeyListener(new Controls(avatar));
-
-        paused = true;
 
         new Timer(1000 / framesPerSecond, new GameLoop(avatar, panel, pipes)).start();
     }

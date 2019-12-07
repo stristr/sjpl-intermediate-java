@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class GameLoop implements ActionListener {
     static int time, scroll;
+    static boolean paused = true;
 
     private ArrayList<Pipe> pipes;
     private Avatar avatar;
@@ -28,7 +29,7 @@ public class GameLoop implements ActionListener {
         avatar.reset();
         time = 0;
         scroll = 0;
-        FlappyBird.paused = true;
+        paused = true;
     }
 
     /**
@@ -94,7 +95,7 @@ public class GameLoop implements ActionListener {
         panel.repaint();
 
         // If the game is paused, we should not do anything to update the game's state.
-        if (FlappyBird.paused) {
+        if (paused) {
             return;
         }
 

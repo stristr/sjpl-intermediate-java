@@ -18,7 +18,7 @@ public class Controls implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             avatar.jump();
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            FlappyBird.paused = false;
+            GameLoop.paused = false;
         }
     }
 

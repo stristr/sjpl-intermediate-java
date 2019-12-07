@@ -42,7 +42,7 @@ public class UserInterface extends JPanel {
      * Why is this method "static" but drawPipes() is not?
      */
     static void drawScore(Graphics g) {
-        AttributedString score = new AttributedString(" Score: " + FlappyBird.getScore() + " ");
+        AttributedString score = new AttributedString(" Score: " + GameLoop.time + " ");
         score.addAttribute(TextAttribute.BACKGROUND, Color.WHITE);
         score.addAttribute(TextAttribute.FONT, scoreFont);
         score.addAttribute(TextAttribute.FOREGROUND, Color.BLACK);
@@ -54,7 +54,7 @@ public class UserInterface extends JPanel {
      * Why is this method "static" but drawPipes() is not?
      */
     static void drawPauseScreen(Graphics g) {
-        if (FlappyBird.paused()) {
+        if (GameLoop.paused) {
             g.setColor(Color.BLACK);
             g.setFont(pauseFont);
             g.setColor(new Color(0, 0, 0, 170));
