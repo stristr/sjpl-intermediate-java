@@ -1,0 +1,13 @@
+diff --git a/Flappy-Bird-Core/FlappyBird.java b/Flappy-Bird-Core/FlappyBird.java
+index b9976d2..3aad37f 100644
+--- a/Flappy-Bird-Core/FlappyBird.java
++++ b/Flappy-Bird-Core/FlappyBird.java
+@@ -3,6 +3,8 @@ import java.util.ArrayList;
+ 
+ /**
+  * The FlappyBird class provides the entry point of the game.
++ *
++ * See if you can figure out how the game works by reading the comments and code.
+  */
+ public class FlappyBird {
+     // This is the frames per second of the game.
