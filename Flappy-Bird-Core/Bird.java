@@ -5,12 +5,11 @@ import java.io.IOException;
 
 public class Bird {
     public static final int RAD = 25;
-    public float x, y, vx, vy;
+    public float x, y, vy;
     private Image img;
 
     public Bird() {
-        x = FlappyBird.WIDTH / 2;
-        y = FlappyBird.HEIGHT / 2;
+        reset();
         try {
             img = ImageIO.read(new File("res/bird.png"));
         } catch (IOException e) {
@@ -18,8 +17,7 @@ public class Bird {
         }
     }
 
-    public void physics() {
-        x += vx;
+    public void fly() {
         y += vy;
         vy += 0.5f;
     }
@@ -34,8 +32,13 @@ public class Bird {
     }
 
     public void reset() {
-        x = 640 / 2;
-        y = 640 / 2;
-        vx = vy = 0;
+        x = FlappyBird.WIDTH / 2;
+        y = FlappyBird.WIDTH / 2;
+        vy = 0;
+    }
+
+    public boolean intersects(Rectangle r) {
+        return r.contains(x + RAD, y + RAD) || r.contains(x + RAD, y - RAD) ||
+                r.contains(x - RAD, y + RAD) || r.contains(x - RAD, y - RAD);
     }
 }

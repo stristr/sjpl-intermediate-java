@@ -10,12 +10,12 @@ public class GamePanel extends JPanel {
     public static final Color bg = new Color(0, 158, 158);
     public static final int PIPE_W = 50, PIPE_H = 30;
     private Bird bird;
-    private ArrayList<Rectangle> rects;
+    private ArrayList<FlappyBird.Rectangle> rects;
     private FlappyBird fb;
     private Font scoreFont, pauseFont;
     private Image pipeHead, pipeLength;
 
-    public GamePanel(FlappyBird fb, Bird bird, ArrayList<Rectangle> rects) {
+    public GamePanel(FlappyBird fb, Bird bird, ArrayList<FlappyBird.Rectangle> rects) {
         this.fb = fb;
         this.bird = bird;
         this.rects = rects;
@@ -36,18 +36,23 @@ public class GamePanel extends JPanel {
         g.fillRect(0, 0, FlappyBird.WIDTH, FlappyBird.HEIGHT);
         bird.update(g);
         g.setColor(Color.RED);
-        for (Rectangle r : rects) {
+        for (FlappyBird.Rectangle r : rects) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setColor(Color.GREEN);
-            //g2d.fillRect(r.x, r.y, r.width, r.height);
             AffineTransform old = g2d.getTransform();
             g2d.translate(r.x + PIPE_W / 2, r.y + PIPE_H / 2);
             if (r.y < FlappyBird.HEIGHT / 2) {
                 g2d.translate(0, r.height);
                 g2d.rotate(Math.PI);
             }
-            g2d.drawImage(pipeHead, -PIPE_W / 2, -PIPE_H / 2, GamePanel.PIPE_W, GamePanel.PIPE_H, null);
+
             g2d.drawImage(pipeLength, -PIPE_W / 2, PIPE_H / 2, GamePanel.PIPE_W, r.height, null);
+
+            if (r.role == FlappyBird.RectangleRole.BOTTOM) {
+                g2d.drawImage(pipeHead, -PIPE_W / 2, -PIPE_H / 2, GamePanel.PIPE_W, GamePanel.PIPE_H, null);
+            } else {
+                g2d.drawImage(pipeHead, -PIPE_W / 2, PIPE_H / 2, GamePanel.PIPE_W, GamePanel.PIPE_H, null);
+            }
             g2d.setTransform(old);
         }
         g.setFont(scoreFont);
