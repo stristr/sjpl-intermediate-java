@@ -1,0 +1,36 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+/**
+ * This class is responsible for handling keyboard input.
+ */
+public class Controls implements KeyListener {
+    private Avatar avatar1;
+    private Avatar avatar2;
+
+    public Controls(Avatar[] avatars) {
+        this.avatar1 = avatars[0];
+        this.avatar2 = avatars[1];
+    }
+
+    /**
+     * This method will fire for every keystroke on the keyboard.
+     */
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
+            avatar1.jump();
+        } else if (e.getKeyCode() == KeyEvent.VK_W) {
+            avatar2.jump();
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            GameLoop.paused = false;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+        // Nothing to do here...yet!
+    }
+
+    public void keyTyped(KeyEvent e) {
+        // Nothing to do here...yet!
+    }
+}
