@@ -5,12 +5,10 @@ import java.awt.event.KeyListener;
  * This class is responsible for handling keyboard input.
  */
 public class Controls implements KeyListener {
-    private Avatar avatar1;
-    private Avatar avatar2;
+    private Avatar[] avatars;
 
     public Controls(Avatar[] avatars) {
-        this.avatar1 = avatars[0];
-        this.avatar2 = avatars[1];
+        this.avatars = avatars;
     }
 
     /**
@@ -18,9 +16,9 @@ public class Controls implements KeyListener {
      */
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            avatar1.jump();
+            avatars[0].jump();
         } else if (e.getKeyCode() == KeyEvent.VK_W) {
-            avatar2.jump();
+            avatars[1].jump();
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             GameLoop.paused = false;
         }

@@ -2,17 +2,16 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The game loop is the main class of every game.
  * It is responsible for updating the graphics on the screen on every frame.
  */
 public class GameLoop implements ActionListener {
-    static int player1Time, player2Time,scroll;
+    static int scroll;
     static boolean paused = true;
-    boolean player1Dead = false; 
-    boolean player2Dead = false;
-    
+
     private ArrayList<Pipe> pipes;
     private Avatar[] avatars;
     private JPanel panel;
@@ -30,8 +29,6 @@ public class GameLoop implements ActionListener {
         pipes.clear();
         avatars[0].reset();
         avatars[1].reset();
-        player1Time = 0;
-        player2Time = 0;
         scroll = 0;
         paused = true;
     }
@@ -62,31 +59,24 @@ public class GameLoop implements ActionListener {
     }
 
     /**
-     * This method checks if the avatar is dead.
+     * This method checks if all avatars are dead.
      */
-    boolean isDead() {
+    boolean isGameOver() {
         // Check if we have collided with any of the pipes.
-        for (Pipe r : pipes) {
-            if (avatars[0].collidesWith(r)) {
-                player1Dead = true;
-            } 
-            if(avatars[1].collidesWith(r)){
-                player2Dead = true;
+        for (Avatar a : avatars) {
+            for (Pipe r : pipes) {
+                if (a.collidesWith(r)) {
+                    a.isDead = true;
+                }
+            }
+
+            if (a.y > FlappyBird.height || a.y + Avatar.radius < 0) {
+                a.isDead = true;
             }
         }
 
-        // Check if we have gone off the screen.
-        boolean offscreen0 = avatars[0].y > FlappyBird.height || avatars[0].y + Avatar.radius < 0;
-        boolean offscreen1 = avatars[1].y > FlappyBird.height || avatars[1].y + Avatar.radius < 0;
-        if (offscreen0) {
-            player1Dead = true;
-        } 
-        if(offscreen1){
-            player2Dead = true;
-        } 
         // If we got here, that means we're still alive.
-   
-        return player1Dead && player2Dead;
+        return Arrays.stream(avatars).allMatch(a -> a.isDead);
     }
 
     /**
@@ -113,25 +103,16 @@ public class GameLoop implements ActionListener {
 
         // Here, we increment the timer and the horizontal scroll.
         // What happens if we don't?
-        if(!player1Dead){
-            player1Time++;
-        }
-          if(player1Dead){
-            avatars[0].y = 500;
-        }
-        
-        if(!player2Dead){
-            player2Time++;
-        }
-        if(player2Dead){
-            avatars[1].y = 500;
-        }
-        
         scroll++;
-
-        // Whenever we're not paused, we go!
-        avatars[0].go(); //player1
-        avatars[1].go(); //player2
+        for (Avatar a : avatars) {
+            if (!a.isDead) {
+                // Whenever we're not paused and not dead, we go!
+                a.go();
+                a.score++;
+            } else {
+                a.x -= 3;
+            }
+        }
 
         // Add pipes if necessary.
         createNewPipes();
@@ -140,10 +121,8 @@ public class GameLoop implements ActionListener {
         updatePipePositions();
 
         // Check if the avatar is dead.
-        if (isDead()) {
+        if (isGameOver()) {
             FlappyBird.lose();
-            player1Dead = false; 
-            player2Dead = false;
             newGame();
         }
 

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The FlappyBird class provides the entry point of the game.
@@ -14,7 +15,7 @@ public class FlappyBird {
     public static final int pipeSpeed = 3;
     private static JFrame frame = new JFrame("Flappy Bird");
     // Can you make a class extension of Avatar other than Bird?
-    private Avatar[] avatars = {new Bird("res/bird.png"), new Bird("res/angrybird.png")};
+    private static Avatar[] avatars = {new Bird("res/bird.png", 0), new Bird("res/angrybird.png", 50)};
     private ArrayList<Pipe> pipes = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -22,7 +23,8 @@ public class FlappyBird {
     }
 
     public static void lose() {
-        JOptionPane.showMessageDialog(frame, "Game over!\n"); // + "Your score was: " + GameLoop.time + ".");
+        Avatar winner = Arrays.stream(avatars).max(Avatar::defeated).get();
+        JOptionPane.showMessageDialog(frame, "Game over! Player " + (Arrays.asList(avatars).indexOf(winner) + 1) + " wins!");
     }
 
     public void go() {

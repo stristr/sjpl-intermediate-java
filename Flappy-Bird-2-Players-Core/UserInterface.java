@@ -83,12 +83,12 @@ public class UserInterface extends JPanel {
         // What happens if we comment this line of code?
         g.setTransform(old);
     }
-    
+
     /**
      * This methods draws all the avatars particiapting in the game
      */
     void drawAvatars(Graphics2D g) {
-        for(int i = 0; i < avatars.length; i++){
+        for (int i = 0; i < avatars.length; i++) {
             drawAvatar(g, avatars[i]);
         }
     }
@@ -128,8 +128,10 @@ public class UserInterface extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         drawAvatars(g2d);
         drawPipes(g2d);
-        drawScore(g,0, 20, GameLoop.player1Time, Color.yellow);
-        drawScore(g,150, 20, GameLoop.player2Time, Color.red);
+        Color[] scoreColors = {Color.yellow, Color.red};
+        for (int i = 0; i < avatars.length; i++) {
+            drawScore(g, i * 150, 20, avatars[i].score, scoreColors[i % 2]);
+        }
         drawPauseScreen(g);
     }
 }

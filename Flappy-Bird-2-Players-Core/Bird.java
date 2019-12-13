@@ -7,9 +7,10 @@ import java.io.IOException;
  */
 public class Bird extends Avatar {
     private String file;
-    public Bird(String file) {
+
+    public Bird(String file, float offset) {
+        super(offset);
         this.file = file;
-        reset();
 
         // (a) What happens if you make gravity bigger?
         // (b) What happens if you make gravity 0?
@@ -23,5 +24,5 @@ public class Bird extends Avatar {
             e.printStackTrace();
         }
     }
-    
+
 }

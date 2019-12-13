@@ -28,14 +28,34 @@ public class Avatar {
     // The amount the Avatar should be rotated when it draws.
     double rotation;
 
+    // How much the Avatar should be offset from the center of the screen.
+    float offset;
+
+    // Whether or not the Avatar is dead.
+    boolean isDead;
+
+    // The current score of the Avatar.
+    int score = 0;
+
+    public Avatar(float offset) {
+        this.offset = offset;
+        reset();
+    }
+
+    public static int defeated(Avatar a, Avatar b) {
+        return a.score - b.score;
+    }
+
     /**
      * Resets the Avatar to the center of the screen.
      */
     public void reset() {
-        x = FlappyBird.width / 2;
+        x = FlappyBird.width / 2 - offset;
         y = FlappyBird.height / 2;
         velocity = 0;
         rotation = 0;
+        isDead = false;
+        score = 0;
     }
 
     /**
