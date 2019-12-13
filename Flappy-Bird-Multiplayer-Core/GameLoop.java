@@ -27,8 +27,9 @@ public class GameLoop implements ActionListener {
      */
     void newGame() {
         pipes.clear();
-        avatars[0].reset();
-        avatars[1].reset();
+        for (Avatar a : avatars) {
+            a.reset();
+        }
         scroll = 0;
         paused = true;
     }
