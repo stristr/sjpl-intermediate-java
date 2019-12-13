@@ -1,0 +1,13 @@
+diff --git a/Flappy-Bird-Multiplayer-Core/FlappyBird.java b/Flappy-Bird-Multiplayer-Core/FlappyBird.java
+index e02b413..da09fe9 100644
+--- a/Flappy-Bird-Multiplayer-Core/FlappyBird.java
++++ b/Flappy-Bird-Multiplayer-Core/FlappyBird.java
+@@ -17,7 +17,7 @@ public class FlappyBird {
+     public static final int pipeSpeed = 3;
+     private static JFrame frame = new JFrame("Flappy Bird");
+     // Can you make a class extension of Avatar other than Bird?
+-    private static Avatar[] avatars = {new Bird("res/bird.png", 0, KeyEvent.VK_UP), new Bird("res/angrybird.png", 50, KeyEvent.VK_W)};
++    private static Avatar[] avatars = {new Bird("res/bird.png", 0, KeyEvent.VK_UP)};
+     private ArrayList<Pipe> pipes = new ArrayList<>();
+ 
+     public static void main(String[] args) {
