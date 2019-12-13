@@ -37,8 +37,12 @@ public class Avatar {
     // The current score of the Avatar.
     int score = 0;
 
-    public Avatar(float offset) {
+    // The key code the Avatar should use to jump.
+    int jumpCode;
+
+    public Avatar(float offset, int jumpCode) {
         this.offset = offset;
+        this.jumpCode = jumpCode;
         reset();
     }
 
@@ -70,10 +74,13 @@ public class Avatar {
     }
 
     /**
-     * jump() immediately updates the velocity of the Avatar to the jump height.
+     * handleKeyCode() immediately updates the velocity of the Avatar to the jump height
+     * when the jump code is provided.
      */
-    public void jump() {
-        velocity = jumpHeight;
+    public void handleKeyCode(int keyCode) {
+        if (keyCode == jumpCode) {
+            velocity = jumpHeight;
+        }
     }
 
     /**

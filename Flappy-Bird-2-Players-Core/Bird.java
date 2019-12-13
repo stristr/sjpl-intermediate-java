@@ -8,8 +8,8 @@ import java.io.IOException;
 public class Bird extends Avatar {
     private String file;
 
-    public Bird(String file, float offset) {
-        super(offset);
+    public Bird(String file, float offset, int jumpCode) {
+        super(offset, jumpCode);
         this.file = file;
 
         // (a) What happens if you make gravity bigger?

@@ -15,12 +15,13 @@ public class Controls implements KeyListener {
      * This method will fire for every keystroke on the keyboard.
      */
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            avatars[0].jump();
-        } else if (e.getKeyCode() == KeyEvent.VK_W) {
-            avatars[1].jump();
-        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             GameLoop.paused = false;
+            return;
+        }
+
+        for (Avatar a : avatars) {
+            a.handleKeyCode(e.getKeyCode());
         }
     }
 

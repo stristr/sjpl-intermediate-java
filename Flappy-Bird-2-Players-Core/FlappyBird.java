@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,7 +16,7 @@ public class FlappyBird {
     public static final int pipeSpeed = 3;
     private static JFrame frame = new JFrame("Flappy Bird");
     // Can you make a class extension of Avatar other than Bird?
-    private static Avatar[] avatars = {new Bird("res/bird.png", 0), new Bird("res/angrybird.png", 50)};
+    private static Avatar[] avatars = {new Bird("res/bird.png", 0, KeyEvent.VK_UP), new Bird("res/angrybird.png", 50, KeyEvent.VK_W)};
     private ArrayList<Pipe> pipes = new ArrayList<>();
 
     public static void main(String[] args) {
