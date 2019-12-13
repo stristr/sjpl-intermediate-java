@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * The FlappyBird class provides the entry point of the game.
@@ -24,8 +25,12 @@ public class FlappyBird {
     }
 
     public static void lose() {
-        Avatar winner = Arrays.stream(avatars).max(Avatar::defeated).get();
-        JOptionPane.showMessageDialog(frame, "Game over! Player " + (Arrays.asList(avatars).indexOf(winner) + 1) + " wins!");
+        Optional<Avatar> winner = Arrays.stream(avatars).max(Avatar::defeated);
+        if (winner.isPresent()) {
+            JOptionPane.showMessageDialog(frame, "Game over! Player " + (Arrays.asList(avatars).indexOf(winner.get()) + 1) + " wins!");
+        } else {
+            JOptionPane.showMessageDialog(frame, "Game over! It's a tie!");
+        }
     }
 
     public void go() {

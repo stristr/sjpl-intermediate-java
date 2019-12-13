@@ -29,18 +29,18 @@ public class Avatar {
     double rotation;
 
     // How much the Avatar should be offset from the center of the screen.
-    float offset;
+    int offset;
 
     // Whether or not the Avatar is dead.
     boolean isDead;
 
     // The current score of the Avatar.
-    int score = 0;
+    int score;
 
     // The key code the Avatar should use to jump.
     int jumpCode;
 
-    public Avatar(float offset, int jumpCode) {
+    public Avatar(int offset, int jumpCode) {
         this.offset = offset;
         this.jumpCode = jumpCode;
         reset();
@@ -59,7 +59,8 @@ public class Avatar {
         velocity = 0;
         rotation = 0;
         isDead = false;
-        score = 0;
+        // Start the score adjusted by the offset, so that all avatars compete for the same progress.
+        score = -offset;
     }
 
     /**

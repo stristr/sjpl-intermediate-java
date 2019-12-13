@@ -42,7 +42,7 @@ public class UserInterface extends JPanel {
      * Why is this method "static" but drawPipes() is not?
      */
     static void drawScore(Graphics g, int x, int y, int time, Color color) {
-        AttributedString score = new AttributedString(" Score: " + time + " ");
+        AttributedString score = new AttributedString(" Score: " + Math.max(time, 0) + " ");
         score.addAttribute(TextAttribute.BACKGROUND, color);
         score.addAttribute(TextAttribute.FONT, scoreFont);
         score.addAttribute(TextAttribute.FOREGROUND, Color.BLACK);
