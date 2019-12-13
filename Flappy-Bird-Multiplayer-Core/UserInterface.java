@@ -85,7 +85,7 @@ public class UserInterface extends JPanel {
     }
 
     /**
-     * This methods draws all the avatars particiapting in the game
+     * This methods draws all the avatars participating in the game.
      */
     void drawAvatars(Graphics2D g) {
         for (int i = 0; i < avatars.length; i++) {

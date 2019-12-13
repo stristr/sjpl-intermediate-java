@@ -46,7 +46,12 @@ public class Avatar {
         reset();
     }
 
-    public static int defeated(Avatar a, Avatar b) {
+    /**
+     * This is a comparison function.
+     *
+     * It can be used to determine if Avatar a has a higher score than Avatar b.
+     */
+    public static int compare(Avatar a, Avatar b) {
         return a.score - b.score;
     }
 

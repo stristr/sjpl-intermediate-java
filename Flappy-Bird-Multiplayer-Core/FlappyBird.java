@@ -25,7 +25,7 @@ public class FlappyBird {
     }
 
     public static void lose() {
-        Optional<Avatar> winner = Arrays.stream(avatars).max(Avatar::defeated);
+        Optional<Avatar> winner = Arrays.stream(avatars).max(Avatar::compare);
         if (winner.isPresent()) {
             JOptionPane.showMessageDialog(frame, "Game over! Player " + (Arrays.asList(avatars).indexOf(winner.get()) + 1) + " wins!");
         } else {

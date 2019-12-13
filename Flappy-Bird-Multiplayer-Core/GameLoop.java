@@ -110,6 +110,7 @@ public class GameLoop implements ActionListener {
                 a.go();
                 a.score++;
             } else {
+                // The avatar should move backward to match the scroll.
                 a.x -= 3;
             }
         }
